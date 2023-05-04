@@ -1,12 +1,14 @@
-import MyModal from "./components/TestDialog.jsx";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Homepage from "./screens/Homepage.jsx";
 
-function App() {
+const App = () => {
   return (
-    <>
-      <h1 className="bg-slate-500 text-cyan-500">TEST</h1>
-      <MyModal />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
