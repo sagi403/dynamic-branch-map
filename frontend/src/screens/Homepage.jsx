@@ -77,9 +77,11 @@ const Homepage = () => {
               {suggestions.map((suggestion, index) => (
                 <div
                   key={suggestion.place_id}
-                  className={`px-4 py-2 cursor-pointer hover:bg-gray-200 ${
+                  className={`px-4 py-2 cursor-pointer ${
                     index === highlightedIndex ? "bg-gray-200" : ""
                   }`}
+                  onMouseEnter={() => setHighlightedIndex(index)}
+                  onMouseLeave={() => setHighlightedIndex(-1)}
                   onClick={() => handleSuggestionClick(suggestion)}
                 >
                   {suggestion.description}
