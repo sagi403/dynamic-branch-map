@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
   const [location, setLocation] = useState("");
@@ -7,6 +8,8 @@ const Homepage = () => {
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [containerMouseDown, setContainerMouseDown] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!window.google) {
@@ -55,7 +58,7 @@ const Homepage = () => {
   };
 
   const handleSearch = () => {
-    // Handle search logic here
+    navigate(`/map?location=${selectedPlace}`);
   };
 
   return (
