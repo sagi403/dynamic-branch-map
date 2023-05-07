@@ -12,11 +12,6 @@ const Homepage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!window.google) {
-      console.error("Google Maps JavaScript API not loaded!");
-      return;
-    }
-
     const autocompleteService =
       new window.google.maps.places.AutocompleteService();
 
@@ -30,7 +25,6 @@ const Homepage = () => {
       autocompleteService.getPlacePredictions({ input: location }, results => {
         results ? setSuggestions(results) : setSuggestions([]);
       });
-
       selectedPlace && setSelectedPlace("");
     }
   }, [location]);

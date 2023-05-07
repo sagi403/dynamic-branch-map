@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { getBranchList } from "../fetchers/getBranchList";
+import { idToColor } from "../utils/idToColor";
+import Map from "../components/Map.jsx";
 
 const MapPage = () => {
   const [branches, setBranches] = useState([]);
   const location = useLocation();
-  const mapRef = useRef(null);
 
   const selectedPlace = new URLSearchParams(location.search).get("location");
 
@@ -17,42 +18,13 @@ const MapPage = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       setBranches(data);
     }
   }, [data]);
 
-  useEffect(() => {
-    if (!window.google) {
-      console.error("Google Maps JavaScript API not loaded!");
-      return;
-    }
-
-    if (!selectedPlace) return;
-
-    const request = {
-      query: selectedPlace,
-      fields: ["geometry"],
-    };
-
-    const map = new window.google.maps.Map(mapRef.current, {
-      center: { lat: 0, lng: 0 },
-      zoom: 15,
-    });
-
-    new window.google.maps.places.PlacesService(map).findPlaceFromQuery(
-      request,
-      (results, status) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-          map.setCenter(results[0].geometry.location);
-        }
-      }
-    );
-  }, [location]);
-
   return (
-    <div className="flex">
-      <div className="w-1/4 p-4">
+    <div className="flex h-screen">
+      <div className="lg:w-1/4 md:w-1/3 w-1/2 p-4 h-full overflow-y-auto">
         <h1 className="text-4xl font-bold mb-4 text-center">The WWW Corp</h1>
         <div className="flex mb-4">
           <input
@@ -64,16 +36,20 @@ const MapPage = () => {
             <MagnifyingGlassIcon className="h-5 w-5" />
           </button>
         </div>
-
         <ul className="list-none p-0">
           {branches.length > 0 &&
             branches.map((branch, index) => (
               <li
                 key={branch.id}
-                className="py-3 border-b border-gray-300 relative hover:bg-gray-200"
+                className="py-3 border-b border-gray-300 hover:bg-gray-200"
               >
                 <div className="flex items-center">
-                  <span className="mx-3 font-bold text-lg">{index + 1}</span>
+                  <div
+                    className="mx-3 font-bold text-lg h-8 w-8 flex items-center justify-center rounded-full"
+                    style={{ backgroundColor: idToColor(branch.id) }}
+                  >
+                    {index + 1}
+                  </div>
                   <div className="w-full">
                     <h2 className="font-bold">{branch.attributes.address}</h2>
                     <p>Distance: 15 km</p>
@@ -84,9 +60,8 @@ const MapPage = () => {
         </ul>
       </div>
 
-      <div className="w-3/4">
-        <div ref={mapRef} style={{ width: "100%", height: "100vh" }}></div>
-        {/* <div style={{ width: "100%", height: "100vh" }}></div> */}
+      <div className="lg:w-3/4 md:w-2/3 w-1/2">
+        <Map location={selectedPlace} />
       </div>
     </div>
   );
