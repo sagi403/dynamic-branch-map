@@ -3,7 +3,7 @@ import branch from "../api/branch";
 export const getBranchList = async () => {
   try {
     const { data } = await branch.get("/branches");
-    return data;
+    return data.data;
   } catch (error) {
     const err =
       error.response && error.response.data.message
