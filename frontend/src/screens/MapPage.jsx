@@ -1,11 +1,25 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getBranchList } from "../fetchers/getBranchList";
 
 const MapPage = () => {
+  const [branches, setBranches] = useState([]);
   const location = useLocation();
   const mapRef = useRef(null);
 
   const selectedPlace = new URLSearchParams(location.search).get("location");
+
+  const { data, error, refetch } = useQuery(["branches"], getBranchList, {
+    staleTime: 5000,
+  });
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      setBranches(data);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (!window.google) {
