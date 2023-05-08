@@ -8,26 +8,24 @@ import Map from "../components/Map.jsx";
 
 const MapPage = () => {
   const [distances, setDistances] = useState([]);
+  const [visibleMarkers, setVisibleMarkers] = useState([]);
+
   const location = useLocation();
 
   const selectedPlace = new URLSearchParams(location.search).get("location");
 
-  const { data, isLoading, error, refetch } = useQuery(
-    ["branches"],
-    getBranchList,
-    {
-      staleTime: 5000,
-    }
-  );
+  const { data, isLoading, error } = useQuery(["branches"], getBranchList, {
+    staleTime: 5000,
+  });
 
   const getDistances = useCallback(async () => {
-    if (!selectedPlace || isLoading || data.length === 0) return;
+    if (!selectedPlace || visibleMarkers.length === 0) return;
 
     const service = new window.google.maps.DistanceMatrixService();
 
-    const destinations = data
-      .slice(0, 1)
-      .map(branch => branch.attributes.address);
+    const destinations = visibleMarkers.map(
+      branch => branch.attributes.address
+    );
 
     service.getDistanceMatrix(
       {
@@ -47,7 +45,7 @@ const MapPage = () => {
         }
       }
     );
-  }, [selectedPlace, data]);
+  }, [selectedPlace, visibleMarkers]);
 
   useEffect(() => {
     getDistances();
@@ -69,8 +67,8 @@ const MapPage = () => {
         </div>
         <ul className="list-none p-0">
           {!isLoading &&
-            data.length > 0 &&
-            data.slice(0, 1).map((branch, index) => (
+            visibleMarkers.length > 0 &&
+            visibleMarkers.map((branch, index) => (
               <li
                 key={branch.id}
                 className="py-3 border-b border-gray-300 hover:bg-gray-200"
@@ -93,7 +91,11 @@ const MapPage = () => {
       </div>
 
       <div className="lg:w-3/4 md:w-2/3 w-1/2">
-        {/* <Map location={selectedPlace} /> */}
+        <Map
+          location={selectedPlace}
+          setVisibleMarkers={setVisibleMarkers}
+          markerPositions={data}
+        />
       </div>
     </div>
   );
