@@ -1,7 +1,8 @@
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import PropTypes from "prop-types";
 import { memo, useCallback, useEffect, useState } from "react";
+import InfoWindowContent from "./InfoWindowContent.jsx";
 import { generateSvgIcon } from "../utils/generateSvgIcon";
 
 const Map = ({
@@ -12,6 +13,7 @@ const Map = ({
 }) => {
   const [markerPosition, setMarkerPosition] = useState(null);
   const [map, setMap] = useState(null);
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
   const onLoad = useCallback(map => setMap(map), []);
 
@@ -36,7 +38,7 @@ const Map = ({
   };
 
   const updateVisibleMarkers = () => {
-    if (!map) return;
+    if (!map || !markerPositions) return;
 
     const mapBoundsObj = map.getBounds();
     if (!mapBoundsObj) return;
@@ -58,6 +60,10 @@ const Map = ({
       mapContainerClassName="w-full h-screen"
       onIdle={updateVisibleMarkers}
       onLoad={onLoad}
+      options={{
+        draggable: !selectedMarker,
+        scrollwheel: !selectedMarker,
+      }}
     >
       {markerPosition && <Marker position={markerPosition} />}
       {visibleMarkers &&
@@ -74,9 +80,31 @@ const Map = ({
                 fontWeight: "bold",
               }}
               icon={generateSvgIcon(marker)}
+              onClick={() => {
+                setSelectedMarker(marker);
+                map.panTo({
+                  lat: marker.attributes.latitude,
+                  lng: marker.attributes.longitude,
+                });
+              }}
             />
           );
         })}
+      {selectedMarker && (
+        <InfoWindow
+          position={{
+            lat: selectedMarker.attributes.latitude,
+            lng: selectedMarker.attributes.longitude,
+          }}
+        >
+          <InfoWindowContent
+            branch={selectedMarker}
+            onClose={() => setSelectedMarker(null)}
+            selectedMarker={selectedMarker}
+            setSelectedMarker={setSelectedMarker}
+          />
+        </InfoWindow>
+      )}
     </GoogleMap>
   );
 };
