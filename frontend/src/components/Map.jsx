@@ -2,8 +2,14 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import PropTypes from "prop-types";
 import { memo, useCallback, useEffect, useState } from "react";
+import { generateSvgIcon } from "../utils/generateSvgIcon";
 
-const Map = ({ location, setVisibleMarkers, markerPositions }) => {
+const Map = ({
+  location,
+  visibleMarkers,
+  setVisibleMarkers,
+  markerPositions,
+}) => {
   const [markerPosition, setMarkerPosition] = useState(null);
   const [map, setMap] = useState(null);
 
@@ -54,6 +60,23 @@ const Map = ({ location, setVisibleMarkers, markerPositions }) => {
       onLoad={onLoad}
     >
       {markerPosition && <Marker position={markerPosition} />}
+      {visibleMarkers &&
+        visibleMarkers.map((marker, index) => {
+          return (
+            <Marker
+              key={marker.id}
+              position={{
+                lat: marker.attributes.latitude,
+                lng: marker.attributes.longitude,
+              }}
+              label={{
+                text: (index + 1).toString(),
+                fontWeight: "bold",
+              }}
+              icon={generateSvgIcon(marker)}
+            />
+          );
+        })}
     </GoogleMap>
   );
 };
@@ -67,6 +90,7 @@ const addressToCoordinates = async address => {
 
 Map.propTypes = {
   location: PropTypes.string,
+  visibleMarkers: PropTypes.array,
   setVisibleMarkers: PropTypes.func,
   markerPositions: PropTypes.array,
 };

@@ -93,6 +93,7 @@ const MapPage = () => {
       <div className="lg:w-3/4 md:w-2/3 w-1/2">
         <Map
           location={selectedPlace}
+          visibleMarkers={visibleMarkers}
           setVisibleMarkers={setVisibleMarkers}
           markerPositions={data}
         />
