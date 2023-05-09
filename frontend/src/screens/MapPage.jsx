@@ -3,12 +3,13 @@ import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { getBranchList } from "../fetchers/getBranchList";
-import { idToColor } from "../utils/idToColor";
 import Map from "../components/Map.jsx";
+import BranchList from "../components/BranchList";
 
 const MapPage = () => {
   const [distances, setDistances] = useState([]);
   const [visibleMarkers, setVisibleMarkers] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
   const location = useLocation();
 
@@ -66,27 +67,13 @@ const MapPage = () => {
           </button>
         </div>
         <ul className="list-none p-0">
-          {!isLoading &&
-            visibleMarkers.length > 0 &&
-            visibleMarkers.map((branch, index) => (
-              <li
-                key={branch.id}
-                className="py-3 border-b border-gray-300 hover:bg-gray-200"
-              >
-                <div className="flex items-center">
-                  <div
-                    className="mx-3 font-bold text-lg h-8 w-8 flex items-center justify-center rounded-full"
-                    style={{ backgroundColor: idToColor(branch.id) }}
-                  >
-                    {index + 1}
-                  </div>
-                  <div className="w-full">
-                    <h2 className="font-bold">{branch.attributes.address}</h2>
-                    <p>Distance: {distances[index]}</p>
-                  </div>
-                </div>
-              </li>
-            ))}
+          {!isLoading && (
+            <BranchList
+              visibleMarkers={visibleMarkers}
+              setSelectedMarker={setSelectedMarker}
+              distances={distances}
+            />
+          )}
         </ul>
       </div>
 
@@ -96,6 +83,8 @@ const MapPage = () => {
           visibleMarkers={visibleMarkers}
           setVisibleMarkers={setVisibleMarkers}
           markerPositions={data}
+          selectedMarker={selectedMarker}
+          setSelectedMarker={setSelectedMarker}
         />
       </div>
     </div>

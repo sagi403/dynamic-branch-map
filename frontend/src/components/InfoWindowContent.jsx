@@ -1,17 +1,18 @@
 import PropTypes from "prop-types";
-import { memo, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 
-const InfoWindowContent = ({
-  branch,
-  onClose,
-  selectedMarker,
-  setSelectedMarker,
-}) => {
+const InfoWindowContent = ({ branch, onClose, selectedMarker }) => {
   const { name, address, phone_number, opening_hours } = branch.attributes;
 
   const formattedOpeningHours = opening_hours
     .split(", ")
     .map((hours, index) => <li key={index}>{hours}</li>);
+
+  const handleKeyUp = useCallback(e => {
+    if (e.key === "Escape" && selectedMarker) {
+      onClose();
+    }
+  }, []);
 
   useEffect(() => {
     if (selectedMarker) {
@@ -21,13 +22,7 @@ const InfoWindowContent = ({
     return () => {
       document.removeEventListener("keyup", handleKeyUp);
     };
-  }, [selectedMarker]);
-
-  const handleKeyUp = e => {
-    if (e.key === "Escape" && selectedMarker) {
-      setSelectedMarker(null);
-    }
-  };
+  }, [selectedMarker, handleKeyUp]);
 
   return (
     <div className="text-sm relative">
@@ -56,7 +51,6 @@ InfoWindowContent.propTypes = {
   branch: PropTypes.object,
   onClose: PropTypes.func,
   selectedMarker: PropTypes.object,
-  setSelectedMarker: PropTypes.func,
 };
 
 const MemoizedInfoWindowContent = memo(InfoWindowContent);

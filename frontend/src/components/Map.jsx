@@ -1,21 +1,38 @@
-import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import PropTypes from "prop-types";
 import { memo, useCallback, useEffect, useState } from "react";
-import InfoWindowContent from "./InfoWindowContent.jsx";
-import { generateSvgIcon } from "../utils/generateSvgIcon";
+import InfoWindowWrapper from "./InfoWindowWrapper.jsx";
+import VisibleMarkersWrapper from "./VisibleMarkersWrapper";
 
 const Map = ({
   location,
   visibleMarkers,
   setVisibleMarkers,
   markerPositions,
+  selectedMarker,
+  setSelectedMarker,
 }) => {
   const [markerPosition, setMarkerPosition] = useState(null);
   const [map, setMap] = useState(null);
-  const [selectedMarker, setSelectedMarker] = useState(null);
 
   const onLoad = useCallback(map => setMap(map), []);
+
+  const handleMarkerPicked = useCallback(
+    marker => {
+      if (!map || !marker) return;
+
+      map.panTo({
+        lat: marker.attributes.latitude,
+        lng: marker.attributes.longitude,
+      });
+    },
+    [map]
+  );
+
+  useEffect(() => {
+    handleMarkerPicked(selectedMarker);
+  }, [handleMarkerPicked, selectedMarker]);
 
   useEffect(() => {
     const fetchPosition = async () => {
@@ -63,48 +80,18 @@ const Map = ({
       options={{
         draggable: !selectedMarker,
         scrollwheel: !selectedMarker,
+        clickableIcons: !selectedMarker,
       }}
     >
       {markerPosition && <Marker position={markerPosition} />}
-      {visibleMarkers &&
-        visibleMarkers.map((marker, index) => {
-          return (
-            <Marker
-              key={marker.id}
-              position={{
-                lat: marker.attributes.latitude,
-                lng: marker.attributes.longitude,
-              }}
-              label={{
-                text: (index + 1).toString(),
-                fontWeight: "bold",
-              }}
-              icon={generateSvgIcon(marker)}
-              onClick={() => {
-                setSelectedMarker(marker);
-                map.panTo({
-                  lat: marker.attributes.latitude,
-                  lng: marker.attributes.longitude,
-                });
-              }}
-            />
-          );
-        })}
-      {selectedMarker && (
-        <InfoWindow
-          position={{
-            lat: selectedMarker.attributes.latitude,
-            lng: selectedMarker.attributes.longitude,
-          }}
-        >
-          <InfoWindowContent
-            branch={selectedMarker}
-            onClose={() => setSelectedMarker(null)}
-            selectedMarker={selectedMarker}
-            setSelectedMarker={setSelectedMarker}
-          />
-        </InfoWindow>
-      )}
+      <VisibleMarkersWrapper
+        visibleMarkers={visibleMarkers}
+        setSelectedMarker={setSelectedMarker}
+      />
+      <InfoWindowWrapper
+        selectedMarker={selectedMarker}
+        setSelectedMarker={setSelectedMarker}
+      />
     </GoogleMap>
   );
 };
@@ -121,6 +108,8 @@ Map.propTypes = {
   visibleMarkers: PropTypes.array,
   setVisibleMarkers: PropTypes.func,
   markerPositions: PropTypes.array,
+  selectedMarker: PropTypes.object,
+  setSelectedMarker: PropTypes.func,
 };
 
 const MemoizedMap = memo(Map);
