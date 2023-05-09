@@ -7,6 +7,8 @@ import Map from "../components/Map.jsx";
 import BranchList from "../components/BranchList";
 import PlacesAutocomplete from "../components/PlacesAutocomplete";
 import { getDistances } from "../utils/distanceUtils";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
 
 const MapPage = () => {
   const [distances, setDistances] = useState([]);
@@ -53,7 +55,11 @@ const MapPage = () => {
           </button>
         </div>
         <ul className="list-none p-0">
-          {!isLoading && (
+          {isLoading ? (
+            <Loader />
+          ) : error ? (
+            <Message />
+          ) : (
             <BranchList
               visibleMarkers={visibleMarkers}
               setSelectedMarker={setSelectedMarker}

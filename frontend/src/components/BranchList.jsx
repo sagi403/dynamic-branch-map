@@ -1,9 +1,14 @@
+import { memo } from "react";
 import PropTypes from "prop-types";
 import { idToColor } from "../utils/idToColor";
-import { memo } from "react";
+import Message from "./Message";
 
 const BranchList = ({ visibleMarkers, setSelectedMarker, distances }) => {
-  if (!visibleMarkers || visibleMarkers.length === 0) return;
+  if (!visibleMarkers || visibleMarkers.length === 0) {
+    return (
+      <Message message="No branches were found in this area." color="blue" />
+    );
+  }
 
   return visibleMarkers.map((branch, index) => (
     <li
