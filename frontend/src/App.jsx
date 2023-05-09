@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Homepage from "./screens/Homepage.jsx";
-import MapPage from "./screens/MapPage.jsx";
-import { useInitScript } from "./hooks/useInitScript.js";
+import Homepage from "./screens/Homepage";
+import MapPage from "./screens/MapPage";
+import { useInitScript } from "./hooks/useInitScript";
 
 const queryClient = new QueryClient();
 

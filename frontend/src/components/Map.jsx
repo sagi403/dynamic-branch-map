@@ -2,7 +2,7 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import PropTypes from "prop-types";
 import { memo, useCallback, useEffect, useState } from "react";
-import InfoWindowWrapper from "./InfoWindowWrapper.jsx";
+import InfoWindowWrapper from "./InfoWindowWrapper";
 import VisibleMarkersWrapper from "./VisibleMarkersWrapper";
 
 const Map = ({

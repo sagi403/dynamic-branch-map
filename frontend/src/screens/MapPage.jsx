@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { getBranchList } from "../fetchers/getBranchList";
-import Map from "../components/Map.jsx";
+import Map from "../components/Map";
 import BranchList from "../components/BranchList";
 import PlacesAutocomplete from "../components/PlacesAutocomplete";
 import { getDistances } from "../utils/distanceUtils";
