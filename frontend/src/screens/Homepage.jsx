@@ -19,6 +19,7 @@ const Homepage = () => {
         <PlacesAutocomplete
           selectedPlace={selectedPlace}
           setSelectedPlace={setSelectedPlace}
+          classes="rounded"
         />
         <div className="flex justify-center mt-4">
           <button

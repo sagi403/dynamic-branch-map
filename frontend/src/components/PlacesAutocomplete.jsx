@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
-const PlacesAutocomplete = ({ selectedPlace, setSelectedPlace }) => {
+const PlacesAutocomplete = ({
+  selectedPlace,
+  setSelectedPlace,
+  classes = "",
+}) => {
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [containerMouseDown, setContainerMouseDown] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -45,11 +49,12 @@ const PlacesAutocomplete = ({ selectedPlace, setSelectedPlace }) => {
     <div
       onMouseDown={() => setContainerMouseDown(true)}
       onMouseUp={() => setContainerMouseDown(false)}
+      className="w-full max-w-md"
     >
       <input
         type="text"
         placeholder="Enter Address or Place"
-        className="w-full px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:border-cyan-500"
+        className={`w-full px-4 py-2 border border-gray-300 shadow-sm focus:outline-none focus:border-cyan-500 ${classes}`}
         value={value}
         onChange={e => setValue(e.target.value)}
         disabled={!ready}
@@ -83,6 +88,7 @@ const PlacesAutocomplete = ({ selectedPlace, setSelectedPlace }) => {
 PlacesAutocomplete.propTypes = {
   setSelectedPlace: PropTypes.func,
   selectedPlace: PropTypes.string,
+  classes: PropTypes.string,
 };
 
 export default PlacesAutocomplete;

@@ -1,23 +1,31 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { getBranchList } from "../fetchers/getBranchList";
 import Map from "../components/Map.jsx";
 import BranchList from "../components/BranchList";
+import PlacesAutocomplete from "../components/PlacesAutocomplete";
 
 const MapPage = () => {
   const [distances, setDistances] = useState([]);
   const [visibleMarkers, setVisibleMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [newLocation, setNewLocation] = useState("");
 
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const selectedPlace = new URLSearchParams(location.search).get("location");
+  const selectedPlace =
+    new URLSearchParams(location.search).get("location") || "Luxembourg";
 
   const { data, isLoading, error } = useQuery(["branches"], getBranchList, {
     staleTime: 5000,
   });
+
+  const handleSearch = () => {
+    navigate(`/map?location=${newLocation}`);
+  };
 
   const getDistances = useCallback(async () => {
     if (!selectedPlace || visibleMarkers.length === 0) return;
@@ -57,12 +65,18 @@ const MapPage = () => {
       <div className="lg:w-1/4 md:w-1/3 w-1/2 p-4 h-full overflow-y-auto">
         <h1 className="text-4xl font-bold mb-4 text-center">The WWW Corp</h1>
         <div className="flex mb-4">
-          <input
-            type="text"
-            placeholder="Search for branch"
-            className="w-full px-4 py-2 border border-gray-300 rounded-l shadow-sm focus:outline-none focus:border-cyan-500"
+          <PlacesAutocomplete
+            selectedPlace={newLocation}
+            setSelectedPlace={setNewLocation}
+            classes="rounded-l"
           />
-          <button className="px-4 py-2 bg-cyan-500 text-white font-bold rounded-r focus:outline-none">
+          <button
+            className={`px-4 py-2 bg-cyan-500 text-white font-bold rounded-r focus:outline-none ${
+              !newLocation && "opacity-50 cursor-not-allowed"
+            }`}
+            onClick={handleSearch}
+            disabled={!newLocation}
+          >
             <MagnifyingGlassIcon className="h-5 w-5" />
           </button>
         </div>
