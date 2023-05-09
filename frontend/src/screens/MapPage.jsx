@@ -61,8 +61,8 @@ const MapPage = () => {
   }, [getDistances]);
 
   return (
-    <div className="flex h-screen">
-      <div className="lg:w-1/4 md:w-1/3 w-1/2 p-4 h-full overflow-y-auto">
+    <div className="md:flex md:h-screen">
+      <div className="lg:w-1/4 md:w-1/3 w-full p-4 h-full overflow-y-auto">
         <h1 className="text-4xl font-bold mb-4 text-center">The WWW Corp</h1>
         <div className="flex mb-4">
           <PlacesAutocomplete
@@ -91,7 +91,7 @@ const MapPage = () => {
         </ul>
       </div>
 
-      <div className="lg:w-3/4 md:w-2/3 w-1/2">
+      <div className="lg:w-3/4 md:w-2/3 w-full h-screen">
         <Map
           location={selectedPlace}
           visibleMarkers={visibleMarkers}
