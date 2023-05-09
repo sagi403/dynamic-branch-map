@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
@@ -6,6 +6,7 @@ import { getBranchList } from "../fetchers/getBranchList";
 import Map from "../components/Map.jsx";
 import BranchList from "../components/BranchList";
 import PlacesAutocomplete from "../components/PlacesAutocomplete";
+import { getDistances } from "../utils/distanceUtils";
 
 const MapPage = () => {
   const [distances, setDistances] = useState([]);
@@ -27,38 +28,9 @@ const MapPage = () => {
     navigate(`/map?location=${newLocation}`);
   };
 
-  const getDistances = useCallback(async () => {
-    if (!selectedPlace || visibleMarkers.length === 0) return;
-
-    const service = new window.google.maps.DistanceMatrixService();
-
-    const destinations = visibleMarkers.map(
-      branch => branch.attributes.address
-    );
-
-    service.getDistanceMatrix(
-      {
-        origins: [selectedPlace],
-        destinations: destinations,
-        travelMode: "DRIVING",
-      },
-      (response, status) => {
-        if (status === "OK") {
-          setDistances(
-            response.rows[0].elements.map(element =>
-              element.status === "OK" ? element.distance.text : "N/A"
-            )
-          );
-        } else {
-          console.error("DistanceMatrixService failed with status:", status);
-        }
-      }
-    );
-  }, [selectedPlace, visibleMarkers]);
-
   useEffect(() => {
-    getDistances();
-  }, [getDistances]);
+    getDistances(selectedPlace, visibleMarkers, setDistances);
+  }, [selectedPlace, visibleMarkers]);
 
   return (
     <div className="md:flex md:h-screen">
