@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
@@ -91,4 +91,5 @@ PlacesAutocomplete.propTypes = {
   classes: PropTypes.string,
 };
 
-export default PlacesAutocomplete;
+const MemoizedPlacesAutocomplete = memo(PlacesAutocomplete);
+export default MemoizedPlacesAutocomplete;

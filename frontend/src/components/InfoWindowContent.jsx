@@ -2,7 +2,11 @@ import PropTypes from "prop-types";
 import { memo, useCallback, useEffect } from "react";
 
 const InfoWindowContent = ({ branch, onClose, selectedMarker }) => {
-  const { name, address, phone_number, opening_hours } = branch.attributes;
+  const { name, address, phone_number, opening_hours, images } =
+    branch.attributes;
+  const imageURL = images?.data[0]?.attributes?.formats?.small?.url;
+
+  const strapiBaseURL = import.meta.env.VITE_BASE_URL;
 
   const formattedOpeningHours = opening_hours
     .split(", ")
@@ -27,7 +31,11 @@ const InfoWindowContent = ({ branch, onClose, selectedMarker }) => {
   return (
     <div className="text-sm relative">
       <img
-        src="https://via.placeholder.com/300x200"
+        src={
+          imageURL
+            ? `${strapiBaseURL}${imageURL}`
+            : "https://via.placeholder.com/300x200"
+        }
         alt={name}
         className="w-full h-40 object-cover mb-2"
       />
