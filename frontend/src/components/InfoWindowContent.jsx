@@ -4,7 +4,7 @@ import { memo, useCallback, useEffect } from "react";
 const InfoWindowContent = ({ branch, onClose, selectedMarker }) => {
   const { name, address, phone_number, opening_hours, images } =
     branch.attributes;
-  const imageURL = images?.data[0]?.attributes?.formats?.small?.url;
+  const imageURL = images?.data?.attributes?.formats?.small?.url;
 
   const strapiBaseURL = import.meta.env.VITE_BASE_URL;
 

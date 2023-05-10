@@ -4,8 +4,7 @@
   "info": {
     "singularName": "branch",
     "pluralName": "branches",
-    "displayName": "Branch",
-    "description": ""
+    "displayName": "Branch"
   },
   "options": {
     "draftAndPublish": true
@@ -15,35 +14,34 @@
     "name": {
       "type": "string",
       "required": true,
-      "unique": false
+      "unique": false,
+      "minLength": 2,
+      "maxLength": 128
     },
     "address": {
       "type": "string",
-      "required": true
+      "required": true,
+      "maxLength": 128,
+      "minLength": 2
     },
     "phone_number": {
-      "type": "string",
-      "required": true
-    },
-    "images": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "type": "string"
     },
     "opening_hours": {
-      "type": "string",
-      "required": true
+      "type": "string"
+    },
+    "images": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
     },
     "latitude": {
-      "type": "float",
-      "required": true
+      "type": "float"
     },
     "longitude": {
-      "type": "float",
-      "required": true
+      "type": "float"
     }
   }
 }
