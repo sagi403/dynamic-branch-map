@@ -28,6 +28,9 @@ PORT = 1337
 APP_KEYS = your app keys
 API_TOKEN_SALT = your api token
 ADMIN_JWT_SECRET = your admin jwt secret
+TRANSFER_TOKEN_SALT = your transfer token salt
+DATABASE_CLIENT = your database client
+DATABASE_FILENAME = your database filename
 JWT_SECRET = your jwt secret
 ```
 
@@ -49,21 +52,14 @@ npm install
 
 ### Run
 
-Run frontend (:5173) & backend (:1337)
-
-```
-cd backend
-npm run dev
-```
-
-Run backend only
+Run backend
 
 ```
 cd backend
 npm run develop
 ```
 
-Run frontend only
+Run frontend
 
 ```
 cd frontend
