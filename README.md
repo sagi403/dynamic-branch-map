@@ -32,6 +32,13 @@ TRANSFER_TOKEN_SALT = your transfer token salt
 DATABASE_CLIENT = your database client
 DATABASE_FILENAME = your database filename
 JWT_SECRET = your jwt secret
+DATABASE_URL = your database url
+DATABASE_HOST = your database host
+DATABASE_PORT = your database port
+DATABASE_NAME = your database name
+DATABASE_USERNAME = your database username
+DATABASE_PASSWORD = your database password
+DATABASE_SSL = your database ssl
 ```
 
 Create a .env file in the frontend directory and add the following:
@@ -52,14 +59,14 @@ npm install
 
 ### Run
 
-Run backend
+Run backend (:1337)
 
 ```
 cd backend
 npm run develop
 ```
 
-Run frontend
+Run frontend (:5173)
 
 ```
 cd frontend
