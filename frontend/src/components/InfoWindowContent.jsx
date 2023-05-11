@@ -33,7 +33,9 @@ const InfoWindowContent = ({ branch, onClose, selectedMarker }) => {
       <img
         src={
           imageURL
-            ? `${strapiBaseURL}${imageURL}`
+            ? `${
+                import.meta.env.NODE_ENV === "development" ? strapiBaseURL : ""
+              }${imageURL}`
             : "https://via.placeholder.com/300x200"
         }
         alt={name}

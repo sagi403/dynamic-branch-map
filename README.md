@@ -39,6 +39,10 @@ DATABASE_NAME = your database name
 DATABASE_USERNAME = your database username
 DATABASE_PASSWORD = your database password
 DATABASE_SSL = your database ssl
+AWS_ACCESS_KEY_ID= your aws key
+AWS_ACCESS_SECRET = your aws secret
+AWS_REGION = your aws region
+AWS_BUCKET_NAME = your aws bucket name
 ```
 
 Create a .env file in the frontend directory and add the following:
@@ -46,6 +50,7 @@ Create a .env file in the frontend directory and add the following:
 ```
 VITE_GOOGLE_MAPS_API_KEY = your google api key
 VITE_BASE_URL = http://localhost:1337
+NODE_ENV = development
 ```
 
 ### Install Dependencies (frontend & backend)
